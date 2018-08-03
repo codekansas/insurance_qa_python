@@ -14,13 +14,30 @@ cd insurance_qa_python
 pwd # where files are stored
 ```
 
-Load a file in Python
+Getting QA format with the files
 
-```python
+```
 import pickle
 
-def load(file_name):
-  return pickle.load(open(os.path.join(path, file_name), 'rb'))
+def get_pickle(filename):
+	return pickle.load(open(filename, 'rb'))
+
+vocab = get_pickle('vocabulary')
+
+def translate_sent(sent):
+	return [vocab[word] for word in sent]
+
+dev = get_pickle('dev')
+answers = get_pickle('answers')
+
+def get_answer(answer_id):
+	return translate_sent(answers[answer_id])
+
+for data_item in dev:
+	for bad_answer in data_item['bad']:
+		print('Question:', translate_sent(data_item['question']))
+		print('Good Answer:', get_answer(data_item['good'][0]))
+		print('Bad Answer: ', get_answer(bad_answer), '\n============')
 ```
 
 About files:
